@@ -3,44 +3,53 @@ import GitHubProvider from "next-auth/providers/github";
 import User from "@/models/User";
 import connectDB from "@/db/connectDB";
 
-
-export const authoptions = NextAuth({
-
+export const authOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
+      clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-
+    async signIn({ user, account }) {
       if (account.provider === "github") {
-        await connectDB();
+        try {
+          await connectDB();
+          const currentUser = await User.findOne({ email: user.email });
 
-        const currentUser = await User.findOne({ email: user.email });
-        if (!currentUser) {
-
-          const newUser = await User.create({
-            email: user.email,
-            username: user.email.split("@")[0],
-          });
+          if (!currentUser) {
+            await User.create({
+              email: user.email,
+              username: user.email.split("@")[0],
+            });
+          }
+          return true;
+        } catch (error) {
+          console.error(error);
+          return false;
         }
-        return true;
       }
+      return false;
     },
 
-    async session({ session, token, user }) {
-      await connectDB();
-      const currentUser = await User.findOne({ email: session.user.email });
-      if (currentUser) {
-      session.user.username = currentUser.username;
-      session.user.id = currentUser._id.toString();
+    async session({ session }) {
+      try {
+        await connectDB();
+        const currentUser = await User.findOne({ email: session.user.email });
+        if (currentUser) {
+          session.user.username = currentUser.username;
+          session.user.id = currentUser._id.toString();
+        }
+        return session;
+      } catch (error) {
+        console.error(error);
+        return session;
       }
-      return session;
-    }
-  }
-}
-);
+    },
+  },
+};
 
-export { authoptions as GET, authoptions as POST };
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
