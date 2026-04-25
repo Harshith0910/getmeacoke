@@ -8,9 +8,12 @@ export default function Home() {
         <p>
           A crowdfunding platform to fund your favourite Content Creators.
         </p>
-        <div>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
           <Link href="/about">
-          <button type="button" className="text-gray-900 bg-linear-to-r from-teal-400 to-lime-200 hover:bg-linear-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-100 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 cursor-pointer">Read More</button>
+            <button type="button" className="text-gray-900 bg-linear-to-r from-teal-400 to-lime-200 hover:bg-linear-to-l hover:from-teal-200 hover:to-lime-200 focus:ring-4 focus:outline-none focus:ring-lime-100 dark:focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Read More</button>
+          </Link>
+          <Link href="/harshith.chittapur">
+            <button type="button" className="text-teal-400 bg-transparent border-2 border-teal-400 hover:bg-teal-400 hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-teal-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer transition-all">Buy Me A Coke</button>
           </Link>
         </div>
       </div>
@@ -45,8 +48,6 @@ export default function Home() {
           <video loop autoPlay muted src="/assets/home.mp4" className="w-full h-auto rounded-lg"></video>
         </div>
       </div>
-
-
     </>
   );
 }
