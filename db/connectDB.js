@@ -1,14 +1,12 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect("mongodb://localhost:27017/cokeDB", {
-            useNewUrlParser: true,
-        });
-    }
-    catch (error) {
-        process.exit(1);
-    }
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 };
 
 export default connectDB;
